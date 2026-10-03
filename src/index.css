@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #121212;
+    color: #f3f4f6;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-serif-luxury {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-sans-luxury {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Custom smooth transition utilities */
+.gold-gradient {
+  background: linear-gradient(135deg, #DFBA73 0%, #C5A059 50%, #9E7D3B 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #F5DFB3 0%, #DFBA73 50%, #C5A059 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-charcoal-light {
+  background-color: #1C1C1C;
+}
+
+.bg-charcoal-deep {
+  background-color: #0F0F0F;
+}
+
+.border-gold-muted {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+.border-gold {
+  border-color: #C5A059;
+}
+
+/* Smooth custom scrollbar for luxury feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}

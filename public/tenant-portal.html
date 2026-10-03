@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tenant Portal | The Crown Penthouse Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              charcoal: {
+                deep: '#0F0F0F',
+                base: '#121212',
+                light: '#1C1C1C',
+              },
+              gold: {
+                main: '#C5A059',
+                muted: 'rgba(197, 160, 89, 0.3)',
+              }
+            },
+            fontFamily: {
+              sans: ['Montserrat', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #121212;
+        color: #f3f4f6;
+        font-family: 'Montserrat', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .gold-gradient {
+        background: linear-gradient(135deg, #DFBA73 0%, #C5A059 50%, #9E7D3B 100%);
+      }
+      .gold-text-gradient {
+        background: linear-gradient(135deg, #F5DFB3 0%, #DFBA73 50%, #C5A059 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+  </head>
+  <body class="bg-charcoal-base text-gray-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-charcoal-base/95 backdrop-blur-md border-b border-gold-main/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="window.location.href='/'">
+          <div class="w-10 h-10 rounded-full border border-gold-main flex items-center justify-center bg-charcoal-light flex-shrink-0">
+            <svg class="w-5 h-5 text-gold-main" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-baseline sm:space-x-3">
+            <div>
+              <span class="font-serif text-xl sm:text-2xl font-bold tracking-wider text-white block">THE CROWN</span>
+              <span class="text-[10px] sm:text-xs tracking-[0.3em] text-gold-main font-medium block uppercase">Penthouse Collection</span>
+            </div>
+            <span class="hidden md:inline-block text-[10px] bg-charcoal-light text-gray-400 border border-gold-main/30 px-2.5 py-1 rounded tracking-widest uppercase font-semibold">Est. 2022</span>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div class="inline-flex items-center space-x-2 bg-green-500/10 border border-green-500/30 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-green-400 shadow">
+            <svg class="w-4 h-4 text-green-400 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Portal Active</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full space-y-12">
+      
+      <!-- Welcome & Reference Banner -->
+      <div class="bg-charcoal-light border border-gold-main/40 rounded-2xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-6 hidden sm:block">
+          <span class="text-xs bg-charcoal-base text-gold-main border border-gold-main/30 px-4 py-2 rounded-full font-mono shadow" id="ref-badge">PRIVATE APPLICATION</span>
+        </div>
+
+        <div class="space-y-4 max-w-2xl">
+          <span class="text-xs text-gold-main uppercase tracking-[0.3em] font-bold block">Secure Tenant Onboarding Portal</span>
+          <h1 class="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight" id="welcome-title">Welcome to Your Tenant Portal</h1>
+          <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+            Your application is saved. Payment confirmation and tenant portal access are updated automatically after the payment provider verifies your transaction.
+          </p>
+        </div>
+
+        <div class="mt-8 pt-8 border-t border-gray-800 grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+          <div class="bg-charcoal-base p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500 uppercase block mb-1">Payment Status</span>
+            <span class="font-bold text-green-400 flex items-center space-x-1">
+              <span id="tenant-payment-status">PAYMENT PENDING</span>
+            </span>
+          </div>
+          <div class="bg-charcoal-base p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500 uppercase block mb-1">Application ID</span>
+            <span class="font-mono text-gold-main font-bold" id="portal-app-id">APP-SECURE</span>
+          </div>
+          <div class="bg-charcoal-base p-4 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-500 uppercase block mb-1">Landlord Review</span>
+            <span class="font-medium text-amber-400 flex items-center space-x-1">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse inline-block mr-1"></span>
+              <span>In Verification Queue</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Status Tracker -->
+      <div class="bg-charcoal-light border border-gold-main/20 rounded-2xl p-8 shadow-xl space-y-6">
+        <h3 class="font-serif text-xl sm:text-2xl font-bold text-white border-b border-gray-800 pb-4">
+          Application Status Tracker
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          <div class="bg-charcoal-base p-6 rounded-xl border-l-4 border-green-500 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Step 1: Fee Paid</span>
+              <span class="w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs font-bold">✓</span>
+            </div>
+            <h4 class="font-serif font-bold text-white text-base">Payment Confirmed</h4>
+            <p class="text-xs text-gray-400 leading-normal" id="tenant-payment-description">Your $80 USD application fee is confirmed automatically by the payment provider.</p>
+          </div>
+
+          <div class="bg-charcoal-base p-6 rounded-xl border-l-4 border-gold-main space-y-2" id="step2-box">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-gold-main uppercase tracking-wider" id="step2-label">Step 2: Action Required</span>
+              <span class="w-6 h-6 rounded-full bg-gold-main/20 text-gold-main flex items-center justify-center text-xs font-bold" id="step2-icon">!</span>
+            </div>
+            <h4 class="font-serif font-bold text-white text-base">Document Verification</h4>
+            <p class="text-xs text-gray-400 leading-normal" id="step2-desc">Please upload your Government ID and recent financial statements below.</p>
+          </div>
+
+          <div class="bg-charcoal-base p-6 rounded-xl border-l-4 border-gray-700 space-y-2" id="step3-box">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Step 3: Pending Review</span>
+              <span class="w-6 h-6 rounded-full bg-gray-800 text-gray-500 flex items-center justify-center text-xs font-bold">3</span>
+            </div>
+            <h4 class="font-serif font-bold text-white text-base">Landlord Clearance</h4>
+            <p class="text-xs text-gray-400 leading-normal">Ownership will review your uploaded verification files within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acquisition payment review -->
+      <section id="acquisition-payment" class="hidden bg-charcoal-light border border-gold-main/30 rounded-2xl p-8 sm:p-10 shadow-2xl space-y-5">
+        <div>
+          <span class="text-xs text-gold-main uppercase tracking-[0.2em] font-medium block">Private payment review</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white mt-2">Application payment</h2>
+          <p class="text-gray-400 text-sm mt-2">Pay the $80 USD application fee through secure NOWPayments checkout. Payment is verified automatically.</p>
+        </div>
+        <div id="acquisition-checkout" class="space-y-3">
+          <label for="checkout-currency" class="text-xs font-semibold text-white uppercase tracking-wider block">Payment currency</label>
+          <select id="checkout-currency" class="w-full border border-gray-700 bg-charcoal-base p-3 text-sm text-white"><option value="btc">Bitcoin</option><option value="eth">Ethereum</option><option value="sol">Solana</option><option value="usdttrc20">USDT (TRC20)</option></select>
+          <button id="checkout-button" class="gold-gradient text-charcoal-base font-bold px-6 py-3 rounded-lg text-sm tracking-wider hover:opacity-95 transition-all">Pay $80 with NOWPayments</button>
+          <p id="checkout-status" class="text-xs text-gray-400"></p>
+        </div>
+      </section>
+
+      <!-- Secure Document Upload Section -->
+      <div id="document-upload" class="hidden bg-charcoal-light border border-gold-main/30 rounded-2xl p-8 sm:p-10 shadow-2xl space-y-8">
+        <div class="space-y-2 border-b border-gray-800 pb-6">
+          <span class="text-xs text-gold-main uppercase tracking-[0.2em] font-medium block">Encrypted Document Vault</span>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Upload Verification Documents
+          </h2>
+          <p class="text-gray-400 text-xs sm:text-sm">
+            Please provide clear copies of your Government ID and requested supporting documents. Files are stored outside the public website and are available only to authorized sales administrators. Acceptable file types: <strong class="text-white">PDF, JPG, PNG (max 5MB per file)</strong>.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          
+          <!-- Government ID Dropzone -->
+          <div class="space-y-3">
+            <label class="text-xs font-semibold text-white uppercase tracking-wider block">
+              1. Government ID (Passport / Driver's License)
+            </label>
+            <input type="file" id="gov-id-input" accept=".pdf,.jpg,.jpeg,.png" class="hidden" onchange="handleFileSelect(this, 'gov')" />
+            
+            <div id="gov-dropzone" 
+                 ondragover="event.preventDefault(); this.classList.add('border-gold-main');" 
+                 ondragleave="this.classList.remove('border-gold-main');" 
+                 ondrop="handleFileDrop(event, 'gov')"
+                 onclick="document.getElementById('gov-id-input').click()"
+                 class="border-2 border-dashed border-gray-700 bg-charcoal-base rounded-xl p-8 text-center cursor-pointer hover:border-gold-main transition-all flex flex-col items-center justify-center min-h-[180px]">
+              
+              <div id="gov-idle-view" class="space-y-2">
+                <svg class="w-12 h-12 text-gold-main mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <span class="text-xs sm:text-sm font-medium text-white block">Click to upload or drag & drop</span>
+                <span class="text-[11px] text-gray-500 block">PDF, JPG, PNG up to 5MB</span>
+              </div>
+
+              <div id="gov-progress-view" class="w-full space-y-3 px-4 hidden">
+                <svg class="w-8 h-8 text-gold-main animate-spin mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span class="text-xs text-white block" id="gov-upload-label">Uploading file...</span>
+                <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                  <div id="gov-progress-bar" class="bg-gold-main h-full w-[15%] transition-all duration-300"></div>
+                </div>
+              </div>
+
+              <div id="gov-success-view" class="space-y-2 hidden">
+                <svg class="w-12 h-12 text-green-400 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-xs sm:text-sm font-bold text-green-400 block">Government ID Uploaded Successfully</span>
+                <span class="text-[11px] text-gray-300 truncate max-w-[200px] block mx-auto" id="gov-filename">filename.pdf</span>
+                <span class="text-[10px] text-gold-main underline mt-2 block">Click to replace file</span>
+              </div>
+
+              <div id="gov-error-view" class="space-y-2 hidden">
+                <svg class="w-12 h-12 text-red-400 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-xs sm:text-sm font-bold text-red-400 block">Upload Failed</span>
+                <span class="text-[11px] text-gray-300 px-2 block leading-snug" id="gov-error-msg">Error message</span>
+                <span class="text-[10px] text-gold-main underline block mt-2">Click to try again</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Statements Dropzone -->
+          <div class="space-y-3">
+            <label class="text-xs font-semibold text-white uppercase tracking-wider block">
+              2. Recent Financial Statements (Bank / Pay Stubs)
+            </label>
+            <input type="file" id="fin-id-input" accept=".pdf,.jpg,.jpeg,.png" class="hidden" onchange="handleFileSelect(this, 'fin')" />
+            
+            <div id="fin-dropzone" 
+                 ondragover="event.preventDefault(); this.classList.add('border-gold-main');" 
+                 ondragleave="this.classList.remove('border-gold-main');" 
+                 ondrop="handleFileDrop(event, 'fin')"
+                 onclick="document.getElementById('fin-id-input').click()"
+                 class="border-2 border-dashed border-gray-700 bg-charcoal-base rounded-xl p-8 text-center cursor-pointer hover:border-gold-main transition-all flex flex-col items-center justify-center min-h-[180px]">
+              
+              <div id="fin-idle-view" class="space-y-2">
+                <svg class="w-12 h-12 text-gold-main mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <span class="text-xs sm:text-sm font-medium text-white block">Click to upload or drag & drop</span>
+                <span class="text-[11px] text-gray-500 block">PDF, JPG, PNG up to 5MB</span>
+              </div>
+
+              <div id="fin-progress-view" class="w-full space-y-3 px-4 hidden">
+                <svg class="w-8 h-8 text-gold-main animate-spin mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span class="text-xs text-white block" id="fin-upload-label">Uploading file...</span>
+                <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                  <div id="fin-progress-bar" class="bg-gold-main h-full w-[15%] transition-all duration-300"></div>
+                </div>
+              </div>
+
+              <div id="fin-success-view" class="space-y-2 hidden">
+                <svg class="w-12 h-12 text-green-400 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-xs sm:text-sm font-bold text-green-400 block">Financial Statements Uploaded Successfully</span>
+                <span class="text-[11px] text-gray-300 truncate max-w-[200px] block mx-auto" id="fin-filename">filename.pdf</span>
+                <span class="text-[10px] text-gold-main underline mt-2 block">Click to replace file</span>
+              </div>
+
+              <div id="fin-error-view" class="space-y-2 hidden">
+                <svg class="w-12 h-12 text-red-400 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-xs sm:text-sm font-bold text-red-400 block">Upload Failed</span>
+                <span class="text-[11px] text-gray-300 px-2 block leading-snug" id="fin-error-msg">Error message</span>
+                <span class="text-[10px] text-gold-main underline block mt-2">Click to try again</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button onclick="window.location.href='/'" class="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-semibold text-white bg-charcoal-base hover:bg-gray-800 border border-gray-700 transition-colors shadow flex items-center justify-center space-x-2">
+          <span>← Return to Main Residence Details</span>
+        </button>
+        <button onclick="window.print()" class="w-full sm:w-auto gold-gradient text-charcoal-base font-bold px-8 py-3 rounded-lg text-sm tracking-wider hover:opacity-95 transition-all shadow-lg uppercase flex items-center justify-center space-x-2">
+          <span>Print Portal Summary</span>
+        </button>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal-deep border-t border-gold-main/20 pt-16 pb-12 text-gray-400 mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <p class="text-xs text-gray-500">
+          The Crown Penthouse Collection LLC • Fully Encrypted Secure Tenant Portal
+        </p>
+        <p class="text-xs text-gray-600">
+          © 2022 The Crown Penthouse Collection LLC. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Frontend Script for Standalone Document Upload & Tracker Updates -->
+    <script>
+/**
+ * ==========================================================
+ * THE CROWN PENTHOUSE COLLECTION
+ * Tenant Portal - Database Driven Access
+ * ==========================================================
+ *
+ * Portal access is based on:
+ *
+ * No localStorage is required for authentication/data loading.
+ * This allows the portal link to work on another device/browser.
+ * ==========================================================
+ */
+
+let applicationId = null;
+let applicationAccessToken = null;
+
+let govUploaded = false;
+let finUploaded = false;
+
+
+/**
+ * ----------------------------------------------------------
+ * PAGE INITIALIZATION
+ * ----------------------------------------------------------
+ */
+window.addEventListener('DOMContentLoaded', async () => {
+
+    try {
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        applicationId = urlParams.get('application');
+
+        if (applicationId && urlParams.get('access')) {
+          applicationAccessToken = urlParams.get('access');
+          await loadAcquisitionPortal(applicationAccessToken);
+          return;
+        }
+
+        showPortalError('Private Portal Link Required', 'Open the private tenant portal link issued with your application.');
+
+    } catch (error) {
+
+        console.error('Tenant portal initialization error:', error);
+
+        showPortalError(
+            'Portal Error',
+            'Unable to load your tenant portal. Please try again.'
+        );
+    }
+});
+
+async function loadAcquisitionPortal(accessToken) {
+  const refresh = async () => {
+    const response = await fetch(`/api/applications/${encodeURIComponent(applicationId)}`, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${accessToken}` } });
+    const result = await response.json();
+    if (!response.ok || !result.application) throw new Error(result.message || 'Private application could not be loaded.');
+    const application = result.application;
+    const order = application.paymentOrder;
+    document.getElementById('ref-badge').innerText = `APPLICATION: ${application.applicationId}`;
+    document.getElementById('welcome-title').innerText = `Welcome, ${application.name}`;
+    document.querySelector('#welcome-title + p').innerText = `Your private acquisition application is currently ${application.applicationStatus}.`;
+    document.getElementById('tenant-payment-status').innerText = application.paymentStatus;
+    document.getElementById('tenant-payment-description').innerText = order ? `NOWPayments status: ${order.paymentStatus}. Application fee: $${order.priceAmount} ${order.priceCurrency}.` : 'Your $80 USD application fee is due through NOWPayments checkout.';
+    document.querySelector('#step2-desc').innerText = application.portalAccess ? 'Payment confirmed automatically. Your tenant portal is active.' : 'Complete payment to unlock document submission.';
+    document.getElementById('acquisition-payment').classList.remove('hidden');
+    const documentSection = document.getElementById('document-upload');
+    documentSection.classList.toggle('hidden', !application.portalAccess);
+    if (application.portalAccess) {
+      document.getElementById('ref-badge').innerText = `VERIFIED: ${application.applicationId}`;
+      document.getElementById('step2-label').innerText = 'Step 2: Complete';
+      document.getElementById('checkout-status').innerText = 'Payment verified. Tenant portal access is active.';
+      document.getElementById('checkout-button').classList.add('hidden');
+    } else if (order) {
+      document.getElementById('checkout-currency').value = order.payCurrency;
+      document.getElementById('checkout-status').innerText = `Checkout status: ${order.paymentStatus}. Return to this page after checkout; status refreshes automatically.`;
+    }
+    return application;
+  };
+  const application = await refresh();
+  if (!application.portalAccess) {
+    document.getElementById('checkout-button').addEventListener('click', async () => {
+      const button = document.getElementById('checkout-button');
+      const status = document.getElementById('checkout-status');
+      button.disabled = true; status.innerText = 'Preparing secure checkout...';
+      try {
+        const checkoutResponse = await fetch(`/api/applications/${encodeURIComponent(applicationId)}/payment`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` }, body: JSON.stringify({ payCurrency: document.getElementById('checkout-currency').value }) });
+        const checkout = await checkoutResponse.json();
+        if (!checkoutResponse.ok || !checkout.invoiceUrl) throw new Error(checkout.message || 'Could not start checkout.');
+        window.location.assign(checkout.invoiceUrl);
+      } catch (error) { status.innerText = error.message || 'Could not start checkout.'; button.disabled = false; }
+    });
+    window.setInterval(() => refresh().catch((error) => console.error('Payment status refresh failed:', error)), 10000);
+  }
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
+}
+
+
+/**
+ * ----------------------------------------------------------
+ * LOAD TENANT PORTAL
+ * ----------------------------------------------------------
+ */
+function showPortalError(title, message) {
+
+    /*
+     * Hide the normal portal content.
+     */
+    const main = document.querySelector('main');
+
+    if (!main) {
+        alert(`${title}\n\n${message}`);
+        return;
+    }
+
+
+    /*
+     * Replace the portal content with a clean error screen.
+     */
+    main.innerHTML = `
+        <div class="min-h-[60vh] flex items-center justify-center">
+            <div class="max-w-xl w-full bg-charcoal-light border border-red-500/30 rounded-2xl p-8 sm:p-12 text-center shadow-2xl">
+
+                <div class="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto mb-6">
+
+                    <svg
+                        class="w-8 h-8 text-red-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 9v4m0 4h.01M10.29 3.86l-7.82 13.5A2 2 0 004.2 20.5h15.6a2 2 0 001.73-3.14l-7.82-13.5a2 2 0 00-3.42 0z"
+                        />
+                    </svg>
+
+                </div>
+
+                <h1 class="font-serif text-3xl font-bold text-white mb-4">
+                    ${escapeHtml(title)}
+                </h1>
+
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">
+                    ${escapeHtml(message)}
+                </p>
+
+                <a
+                    href="/"
+                    class="inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-semibold text-white bg-charcoal-base hover:bg-gray-800 border border-gray-700 transition-colors"
+                >
+                    Return to Main Residence Details
+                </a>
+
+            </div>
+        </div>
+    `;
+}
+
+
+/**
+ * ----------------------------------------------------------
+ * HTML ESCAPE
+ * ----------------------------------------------------------
+ */
+function escapeHtml(value) {
+
+    const div = document.createElement('div');
+
+    div.textContent = value == null ? '' : String(value);
+
+    return div.innerHTML;
+}
+
+
+function updateOverallTracker() {
+
+    if (govUploaded && finUploaded) {
+
+        const step2Box =
+            document.getElementById('step2-box');
+
+        step2Box.className =
+            "bg-charcoal-base p-6 rounded-xl border-l-4 border-green-500 space-y-2";
+
+
+        document.getElementById('step2-label').className =
+            "text-xs font-bold text-green-400 uppercase tracking-wider";
+
+        document.getElementById('step2-label').innerText =
+            "Step 2: Documents Submitted";
+
+
+        document.getElementById('step2-icon').className =
+            "w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs font-bold";
+
+        document.getElementById('step2-icon').innerText =
+            "✓";
+
+
+        document.getElementById('step2-desc').innerText =
+            "Government ID and Financial Statements have been uploaded successfully and are awaiting landlord review.";
+
+
+        const step3Box =
+            document.getElementById('step3-box');
+
+        step3Box.className =
+            "bg-charcoal-base p-6 rounded-xl border-l-4 border-amber-400 space-y-2";
+    }
+}
+
+
+/**
+ * ----------------------------------------------------------
+ * FILE DROP
+ * ----------------------------------------------------------
+ */
+function handleFileDrop(event, type) {
+
+    event.preventDefault();
+
+    const dropzone =
+        document.getElementById(`${type}-dropzone`);
+
+    dropzone.classList.remove('border-gold-main');
+
+
+    if (
+        event.dataTransfer.files &&
+        event.dataTransfer.files[0]
+    ) {
+
+        processFile(
+            event.dataTransfer.files[0],
+            type
+        );
+    }
+}
+
+
+/**
+ * ----------------------------------------------------------
+ * FILE SELECT
+ * ----------------------------------------------------------
+ */
+function handleFileSelect(input, type) {
+
+    if (
+        input.files &&
+        input.files[0]
+    ) {
+
+        processFile(
+            input.files[0],
+            type
+        );
+    }
+}
+
+
+/**
+ * ----------------------------------------------------------
+ * FILE PROCESSING
+ * ----------------------------------------------------------
+ */
+function processFile(file, type) {
+
+    const idleView =
+        document.getElementById(`${type}-idle-view`);
+
+    const progressView =
+        document.getElementById(`${type}-progress-view`);
+
+    const successView =
+        document.getElementById(`${type}-success-view`);
+
+    const errorView =
+        document.getElementById(`${type}-error-view`);
+
+    const dropzone =
+        document.getElementById(`${type}-dropzone`);
+
+
+    /*
+     * Hide views.
+     */
+    idleView.classList.add('hidden');
+    successView.classList.add('hidden');
+    errorView.classList.add('hidden');
+    progressView.classList.remove('hidden');
+
+
+    dropzone.className =
+        "border-2 border-dashed border-gray-700 bg-charcoal-base rounded-xl p-8 text-center cursor-pointer flex flex-col items-center justify-center min-h-[180px]";
+
+
+    /*
+     * Validate file size.
+     */
+    if (file.size > 5 * 1024 * 1024) {
+
+        progressView.classList.add('hidden');
+        errorView.classList.remove('hidden');
+
+        document.getElementById(
+            `${type}-error-msg`
+        ).innerText =
+            `File size exceeds 5MB limit (${(
+                file.size /
+                (1024 * 1024)
+            ).toFixed(1)}MB).`;
+
+        dropzone.classList.add(
+            'border-red-500/50',
+            'bg-red-500/5'
+        );
+
+        return;
+    }
+
+
+    /*
+     * Validate MIME type.
+     */
+    const validTypes = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+        'image/jpg'
+    ];
+
+
+    if (!validTypes.includes(file.type)) {
+
+        progressView.classList.add('hidden');
+        errorView.classList.remove('hidden');
+
+        document.getElementById(
+            `${type}-error-msg`
+        ).innerText =
+            'Invalid file type. Only PDF, JPG, and PNG are permitted.';
+
+        dropzone.classList.add(
+            'border-red-500/50',
+            'bg-red-500/5'
+        );
+
+        return;
+    }
+
+
+    /*
+     * Make sure payment/application information
+     * was loaded before allowing upload.
+     */
+    if (!applicationId || !applicationAccessToken) {
+
+        progressView.classList.add('hidden');
+        errorView.classList.remove('hidden');
+
+        document.getElementById(
+            `${type}-error-msg`
+        ).innerText =
+            'Your private application link is missing its access token. Reopen the portal link from your application.';
+
+        return;
+    }
+
+
+    document.getElementById(
+        `${type}-upload-label`
+    ).innerText =
+        `Uploading ${file.name}...`;
+
+
+    const progressBar =
+        document.getElementById(
+            `${type}-progress-bar`
+        );
+
+    progressBar.style.width = '25%';
+
+
+    setTimeout(() => {
+        progressBar.style.width = '65%';
+    }, 500);
+
+
+    setTimeout(() => {
+        progressBar.style.width = '90%';
+    }, 1000);
+
+
+    /*
+     * Prepare upload.
+     */
+    const formData = new FormData();
+
+    formData.append(
+        'document',
+        file
+    );
+
+    formData.append(
+        'documentType',
+        type
+    );
+
+
+    /*
+     * IMPORTANT:
+     *
+     * These two values allow the backend to associate
+     * the uploaded document with the correct tenant.
+     */
+    formData.append(
+        'applicationId',
+        applicationId
+    );
+
+    fetch(
+      `/api/applications/${encodeURIComponent(applicationId)}/documents`,
+        {
+            method: 'POST',
+            body: formData,
+        headers: { 'Authorization': `Bearer ${applicationAccessToken}` }
+        }
+    )
+    .then(async response => {
+
+        let data;
+
+        try {
+            data = await response.json();
+        } catch (error) {
+
+            throw new Error(
+                'Invalid response received from upload server.'
+            );
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                'Secure upload failed.'
+            );
+        }
+
+
+        return data;
+    })
+    .then(data => {
+
+        setTimeout(() => {
+
+            progressView.classList.add('hidden');
+
+
+            if (data.status === true) {
+
+                successView.classList.remove('hidden');
+
+
+                document.getElementById(
+                    `${type}-filename`
+                ).innerText =
+                    data.filename ||
+                    file.name;
+
+
+                dropzone.className =
+                    "border-2 border-dashed border-green-500/50 bg-green-500/5 rounded-xl p-8 text-center cursor-pointer flex flex-col items-center justify-center min-h-[180px]";
+
+
+                if (type === 'gov') {
+                    govUploaded = true;
+                }
+
+
+                if (type === 'fin') {
+                    finUploaded = true;
+                }
+
+
+                updateOverallTracker();
+
+            } else {
+
+                errorView.classList.remove('hidden');
+
+                document.getElementById(
+                    `${type}-error-msg`
+                ).innerText =
+                    data.message ||
+                    'Secure upload failed. Please try again.';
+
+
+                dropzone.classList.add(
+                    'border-red-500/50',
+                    'bg-red-500/5'
+                );
+            }
+
+        }, 1400);
+    })
+    .catch(error => {
+
+        console.error(
+            'Document upload error:',
+            error
+        );
+
+
+        progressView.classList.add('hidden');
+        errorView.classList.remove('hidden');
+
+
+        document.getElementById(
+            `${type}-error-msg`
+        ).innerText =
+            error.message ||
+            'Network error during upload.';
+
+
+        dropzone.classList.add(
+            'border-red-500/50',
+            'bg-red-500/5'
+        );
+    });
+}
+</script>
+  </body>
+</html>
