@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronRight, Clock3, CreditCard, Eye, LayoutDashboard, LogOut, Search, ShieldCheck, Users } from 'lucide-react';
 import { ApplicantRecord } from '../data/applicationStore';
+import API_URL from "../api";
 
 interface SalesDashboardProps { onBack: () => void; }
 type AdminRecord = ApplicantRecord & { paymentOrder: { orderId: string; paymentId: string | null; paymentStatus: string; priceAmount: string; priceCurrency: string; payCurrency: string } | null };
@@ -20,7 +21,7 @@ export const SalesDashboard: React.FC<SalesDashboardProps> = ({ onBack }) => {
   const [error, setError] = useState('');
 
   const load = async () => {
-    const response = await fetch('/api/admin/applications', { credentials: 'include' });
+    const response = await fetch('${API_URL}/api/admin/applications', { credentials: 'include' });
     if (response.status === 401) { setAuthenticated(false); return; }
     const result = await response.json();
     if (!response.ok) { setError(result.message || 'Could not load applications.'); return; }
@@ -29,13 +30,13 @@ export const SalesDashboard: React.FC<SalesDashboardProps> = ({ onBack }) => {
     setSelected((current) => current ? result.applications.find((item: AdminRecord) => item.applicationId === current.applicationId) || null : null);
   };
 
-  useEffect(() => { void fetch('/api/admin/me', { credentials: 'include' }).then((response) => { setAuthenticated(response.ok); if (response.ok) void load(); }).catch(() => setAuthenticated(false)); }, []);
+  useEffect(() => { void fetch('${API_URL}/api/admin/me', { credentials: 'include' }).then((response) => { setAuthenticated(response.ok); if (response.ok) void load(); }).catch(() => setAuthenticated(false)); }, []);
   useEffect(() => { if (!authenticated) return undefined; const timer = window.setInterval(() => void load(), 15000); return () => window.clearInterval(timer); }, [authenticated]);
   useEffect(() => {
     if (!selected) { setDocuments([]); setConversation([]); return undefined; }
     const refreshDetails = () => {
-      void fetch(`/api/admin/applications/${encodeURIComponent(selected.applicationId)}/documents`, { credentials: 'include' }).then((response) => response.json()).then((result) => setDocuments(result.documents || [])).catch(() => setDocuments([]));
-      void fetch(`/api/admin/applications/${encodeURIComponent(selected.applicationId)}/conversation`, { credentials: 'include' }).then((response) => response.json()).then((result) => setConversation(result.conversationHistory || [])).catch(() => setConversation([]));
+      void fetch(`${API_URL}/api/admin/applications/${encodeURIComponent(selected.applicationId)}/documents`, { credentials: 'include' }).then((response) => response.json()).then((result) => setDocuments(result.documents || [])).catch(() => setDocuments([]));
+      void fetch(`${API_URL}/api/admin/applications/${encodeURIComponent(selected.applicationId)}/conversation`, { credentials: 'include' }).then((response) => response.json()).then((result) => setConversation(result.conversationHistory || [])).catch(() => setConversation([]));
     };
     refreshDetails();
     const timer = window.setInterval(refreshDetails, 15000);
@@ -45,13 +46,13 @@ export const SalesDashboard: React.FC<SalesDashboardProps> = ({ onBack }) => {
   const login = async (event: React.FormEvent) => {
     event.preventDefault(); setError('');
     try {
-      const response = await fetch('/api/admin/login', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+      const response = await fetch('${API_URL}/api/admin/login', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
       const result = await response.json();
       if (!response.ok) { setError(result.message || 'Login failed.'); return; }
       setAuthenticated(true); await load();
     } catch { setError('Admin API is unavailable.'); }
   };
-  const logout = async () => { await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' }); setAuthenticated(false); setRecords([]); setSelected(null); };
+  const logout = async () => { await fetch('${API_URL}/api/admin/logout', { method: 'POST', credentials: 'include' }); setAuthenticated(false); setRecords([]); setSelected(null); };
 
   if (authenticated === null) return <div className="min-h-screen bg-[#101010] p-12 text-center text-gray-400">Checking private access...</div>;
   if (!authenticated) return <section className="min-h-screen bg-[#101010] px-4 py-16 sm:px-8"><div className="mx-auto max-w-md border border-[#C5A059]/25 bg-[#191919] p-8"><button onClick={onBack} className="mb-10 inline-flex items-center gap-2 text-sm text-[#C5A059]"><ArrowLeft className="h-4 w-4" /> Return to residences</button><ShieldCheck className="mb-5 h-9 w-9 text-[#C5A059]" /><h1 className="font-serif-luxury text-4xl text-white">Admin sign in</h1><p className="mt-3 text-sm leading-6 text-gray-500">This area is restricted to authorized Crown sales administrators.</p><form onSubmit={login} className="mt-8 space-y-5"><input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Admin email" className="w-full border border-white/10 bg-[#101010] p-3 text-sm text-white outline-none focus:border-[#C5A059]" /><input required type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" className="w-full border border-white/10 bg-[#101010] p-3 text-sm text-white outline-none focus:border-[#C5A059]" />{error && <p className="text-sm text-red-300">{error}</p>}<button className="gold-gradient w-full p-3 text-sm font-semibold text-[#121212]">Sign in securely</button></form></div></section>;
