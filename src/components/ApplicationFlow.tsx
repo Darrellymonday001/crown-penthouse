@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Check, ChevronLeft, ChevronRight, ExternalLink, LockKeyhole, ShieldCheck } from 'lucide-react';
 import { ApartmentData } from '../data/apartmentData';
 import { ApplicantRecord, ConversationEntry } from '../data/applicationStore';
+import API_URL from "../api";
 
 interface ApplicationFlowProps { data: ApartmentData; onComplete: (record: ApplicantRecord) => void; }
 type Step = 'welcome' | 'name' | 'email' | 'phone' | 'intent' | 'payment' | 'verification' | 'summary' | 'submitted';
