@@ -315,6 +315,11 @@
 
     <!-- Frontend Script for Standalone Document Upload & Tracker Updates -->
     <script>
+
+      const API_URL = (
+  window.__API_URL__ ||
+  'https://crown-penthouse-api.onrender.com'
+).replace(/\/$/, '');
 /**
  * ==========================================================
  * THE CROWN PENTHOUSE COLLECTION
@@ -369,7 +374,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 async function loadAcquisitionPortal(accessToken) {
   const refresh = async () => {
-    const response = await fetch(`/api/applications/${encodeURIComponent(applicationId)}`, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${accessToken}` } });
+    const response = await fetch(`${API_URL}/api/applications/${encodeURIComponent(applicationId)}`, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${accessToken}` } });
     const result = await response.json();
     if (!response.ok || !result.application) throw new Error(result.message || 'Private application could not be loaded.');
     const application = result.application;
@@ -401,7 +406,7 @@ async function loadAcquisitionPortal(accessToken) {
       const status = document.getElementById('checkout-status');
       button.disabled = true; status.innerText = 'Preparing secure checkout...';
       try {
-        const checkoutResponse = await fetch(`/api/applications/${encodeURIComponent(applicationId)}/payment`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` }, body: JSON.stringify({ payCurrency: document.getElementById('checkout-currency').value }) });
+        const checkoutResponse = await fetch(`${API_URL}/api/applications/${encodeURIComponent(applicationId)}/payment`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` }, body: JSON.stringify({ payCurrency: document.getElementById('checkout-currency').value }) });
         const checkout = await checkoutResponse.json();
         if (!checkoutResponse.ok || !checkout.invoiceUrl) throw new Error(checkout.message || 'Could not start checkout.');
         window.location.assign(checkout.invoiceUrl);
