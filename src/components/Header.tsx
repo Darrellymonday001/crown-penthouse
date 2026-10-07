@@ -35,13 +35,13 @@ export const Header: React.FC<HeaderProps> = ({ onScrollToApply, onViewConfirmat
         <div className="flex items-center space-x-3 sm:space-x-6">
           
           {/* Direct Verification Badge */}
-          <div className="hidden lg:flex items-center space-x-2 text-xs text-[#a0a0a0] bg-[#1C1C1C] px-3 py-1.5 rounded-full border border-[#C5A059]/20">
+          {/* <div className="hidden lg:flex items-center space-x-2 text-xs text-[#a0a0a0] bg-[#1C1C1C] px-3 py-1.5 rounded-full border border-[#C5A059]/20">
             <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
             <span>Verified Luxury Listing & Owner Portal</span>
-          </div>
+          </div> */}
 
           {/* Apply CTA Button OR Payment Completed Badge */}
-          {/* <button onClick={onScrollToApply} className="gold-gradient text-[#121212] font-semibold px-5 py-2.5 rounded text-xs sm:text-sm tracking-wider hover:opacity-95 transition-all shadow-lg hover:shadow-[#C5A059]/20 uppercase">Apply for a Residence</button> */}
+          { <button onClick={onScrollToApply} className="gold-gradient text-[#121212] font-semibold px-5 py-2.5 rounded text-xs sm:text-sm tracking-wider hover:opacity-95 transition-all shadow-lg hover:shadow-[#C5A059]/20 uppercase">APPLY NOW ($80)</button>}
           <button onClick={onViewConfirmation} className="hidden sm:inline-flex items-center gap-2 border border-[#C5A059]/30 px-4 py-2.5 text-xs text-[#C5A059] hover:border-[#C5A059] transition-colors"><LayoutDashboard className="h-4 w-4" /> Sales Dashboard</button>
 
         </div>
