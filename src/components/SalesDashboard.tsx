@@ -1,7 +1,9 @@
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronRight, Clock3, CreditCard, Eye, LayoutDashboard, LogOut, Search, ShieldCheck, Users } from 'lucide-react';
 import { ApplicantRecord } from '../data/applicationStore';
-import API_URL from "../api";
+// import API_URL from "../api";
 
 interface SalesDashboardProps { onBack: () => void; }
 type AdminRecord = ApplicantRecord & { paymentOrder: { orderId: string; paymentId: string | null; paymentStatus: string; priceAmount: string; priceCurrency: string; payCurrency: string } | null };
