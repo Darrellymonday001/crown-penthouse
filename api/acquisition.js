@@ -105,29 +105,220 @@ app.get('/api/applications/:applicationId', async (request, response) => {
   return response.json({ application: { ...application, portalAccess: application.paymentStatus === 'PAYMENT VERIFIED', paymentOrder: orders[0] || null }, conversationHistory: messages });
 });
 
-app.post('/api/applications/:applicationId/payment', applicantAuth, async (request, response) => {
-  const selectedCurrency = String(request.body?.payCurrency || '').toLowerCase();
-  const allowedCurrencies = new Set(['btc', 'eth', 'sol', 'usdttrc20']);
-  if (!allowedCurrencies.has(selectedCurrency)) return response.status(400).json({ message: 'Select a supported payment currency.' });
-  const [applications] = await pool.query('SELECT application_id, email, name, residence FROM applications WHERE application_id = ? AND access_token_hash = ?', [request.params.applicationId, request.applicantTokenHash]);
-  if (!applications.length) return response.status(404).json({ message: 'Application not found.' });
-  const application = applications[0];
-  const [existingOrders] = await pool.query('SELECT order_id AS orderId, invoice_url AS invoiceUrl FROM payment_orders WHERE application_id = ? AND pay_currency = ? AND payment_status NOT IN (\'finished\', \'failed\', \'expired\') ORDER BY id DESC LIMIT 1', [application.application_id, selectedCurrency]);
-  if (existingOrders.length && existingOrders[0].invoiceUrl) return response.json({ invoiceUrl: existingOrders[0].invoiceUrl, orderId: existingOrders[0].orderId, reused: true });
-  const orderId = `CPC-${application.application_id}-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
-  const feeAmount = Number(process.env.APPLICATION_FEE_USD || 80);
-  const origin = process.env.PUBLIC_APP_URL;
-  const callbackBase = process.env.API_PUBLIC_URL;
-  if (!isPublicHttpsUrl(origin) || !isPublicHttpsUrl(callbackBase)) return response.status(503).json({ message: 'Set PUBLIC_APP_URL and API_PUBLIC_URL to publicly reachable HTTPS addresses before starting NOWPayments checkout.' });
-  try {
-    const access = encodeURIComponent(request.applicantAccessToken);
-    const returnUrl = `${origin}/tenant-portal.html?application=${encodeURIComponent(application.application_id)}&access=${access}`;
-    const invoice = await nowPaymentsRequest('/invoice', { method: 'POST', body: JSON.stringify({ price_amount: feeAmount, price_currency: 'usd', pay_currency: selectedCurrency, order_id: orderId, order_description: `Crown Penthouse Collection application fee - ${application.application_id}`, ipn_callback_url: `${callbackBase.replace(/\/$/, '')}/api/payments/nowpayments/ipn`, success_url: `${returnUrl}&payment=success`, cancel_url: `${returnUrl}&payment=cancelled` }) });
-    await pool.query('INSERT INTO payment_orders (application_id, order_id, invoice_id, payment_status, price_amount, price_currency, pay_currency, invoice_url, provider_payload) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [application.application_id, orderId, invoice.id || null, 'waiting', feeAmount, 'USD', selectedCurrency, invoice.invoice_url, JSON.stringify(invoice)]);
-    await pool.query('UPDATE applications SET application_status = \'PAYMENT PENDING\', payment_status = \'PAYMENT PENDING\' WHERE application_id = ?', [application.application_id]);
-    return response.status(201).json({ invoiceUrl: invoice.invoice_url, orderId, invoiceId: invoice.id });
-  } catch (error) { console.error('[NOWPAYMENTS_INVOICE]', error); return response.status(502).json({ message: error.message || 'Unable to start crypto checkout.' }); }
-});
+
+app.post(
+  '/api/applications/:applicationId/payment',
+  applicantAuth,
+  async (request, response) => {
+    const [applications] = await pool.query(
+      'SELECT application_id, email, name, residence FROM applications WHERE application_id = ? AND access_token_hash = ?',
+      [
+        request.params.applicationId,
+        request.applicantTokenHash
+      ]
+    );
+
+    if (!applications.length) {
+      return response.status(404).json({
+        message: 'Application not found.'
+      });
+    }
+
+    const application = applications[0];
+
+    /*
+     * We intentionally do NOT require a payCurrency here.
+     *
+     * The applicant should not have to choose Bitcoin,
+     * Ethereum, Solana, USDT, etc. on the application page.
+     *
+     * NOWPayments will handle the available payment
+     * currency options through its hosted checkout.
+     */
+
+    /*
+     * If there is already an active payment order for this
+     * application, return its existing invoice instead of
+     * creating another payment order.
+     */
+    const [existingOrders] = await pool.query(
+      `SELECT
+        order_id AS orderId,
+        invoice_url AS invoiceUrl
+       FROM payment_orders
+       WHERE application_id = ?
+       AND payment_status NOT IN (
+         'finished',
+         'failed',
+         'expired'
+       )
+       ORDER BY id DESC
+       LIMIT 1`,
+      [application.application_id]
+    );
+
+    if (
+      existingOrders.length &&
+      existingOrders[0].invoiceUrl
+    ) {
+      return response.json({
+        invoiceUrl: existingOrders[0].invoiceUrl,
+        orderId: existingOrders[0].orderId,
+        reused: true
+      });
+    }
+
+    const orderId =
+      `CPC-${application.application_id}-` +
+      crypto
+        .randomBytes(4)
+        .toString('hex')
+        .toUpperCase();
+
+    const feeAmount = Number(
+      process.env.APPLICATION_FEE_USD || 80
+    );
+
+    const origin =
+      process.env.PUBLIC_APP_URL;
+
+    const callbackBase =
+      process.env.API_PUBLIC_URL;
+
+    if (
+      !isPublicHttpsUrl(origin) ||
+      !isPublicHttpsUrl(callbackBase)
+    ) {
+      return response.status(503).json({
+        message:
+          'Set PUBLIC_APP_URL and API_PUBLIC_URL to publicly reachable HTTPS addresses before starting NOWPayments checkout.'
+      });
+    }
+
+    try {
+      const access = encodeURIComponent(
+        request.applicantAccessToken
+      );
+
+      const returnUrl =
+        `${origin}/tenant-portal.html` +
+        `?application=${encodeURIComponent(
+          application.application_id
+        )}` +
+        `&access=${access}`;
+
+      /*
+       * IMPORTANT:
+       *
+       * We create the NOWPayments invoice using USD as the
+       * price currency.
+       *
+       * We deliberately DO NOT send pay_currency.
+       *
+       * This allows NOWPayments to present its supported
+       * payment currencies on the hosted checkout.
+       */
+      const invoice =
+        await nowPaymentsRequest(
+          '/invoice',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              price_amount: feeAmount,
+              price_currency: 'usd',
+
+              order_id: orderId,
+
+              order_description:
+                `Crown Penthouse Collection application fee - ${application.application_id}`,
+
+              ipn_callback_url:
+                `${callbackBase.replace(
+                  /\/$/,
+                  ''
+                )}/api/payments/nowpayments/ipn`,
+
+              success_url:
+                `${returnUrl}&payment=success`,
+
+              cancel_url:
+                `${returnUrl}&payment=cancelled`
+            })
+          }
+        );
+
+      /*
+       * NOWPayments should return an invoice URL.
+       */
+      if (!invoice?.invoice_url) {
+        throw new Error(
+          'NOWPayments did not return a checkout URL.'
+        );
+      }
+
+      /*
+       * Because no specific pay_currency was selected,
+       * store a generic value until the provider confirms
+       * the actual payment currency.
+       */
+      await pool.query(
+        `INSERT INTO payment_orders
+        (
+          application_id,
+          order_id,
+          invoice_id,
+          payment_status,
+          price_amount,
+          price_currency,
+          pay_currency,
+          invoice_url,
+          provider_payload
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          application.application_id,
+          orderId,
+          invoice.id || null,
+          'waiting',
+          feeAmount,
+          'USD',
+          'NOWPAYMENTS',
+          invoice.invoice_url,
+          JSON.stringify(invoice)
+        ]
+      );
+
+      await pool.query(
+        `UPDATE applications
+         SET
+           application_status = 'PAYMENT PENDING',
+           payment_status = 'PAYMENT PENDING'
+         WHERE application_id = ?`,
+        [application.application_id]
+      );
+
+      return response.status(201).json({
+        invoiceUrl: invoice.invoice_url,
+        orderId,
+        invoiceId: invoice.id || null
+      });
+
+    } catch (error) {
+      console.error(
+        '[NOWPAYMENTS_INVOICE]',
+        error
+      );
+
+      return response.status(502).json({
+        message:
+          error.message ||
+          'Unable to start secure NOWPayments checkout.'
+      });
+    }
+  }
+);
+
+
 
 app.post('/api/payments/nowpayments/ipn', async (request, response) => {
   const payload = request.body || {};
