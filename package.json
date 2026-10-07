@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:server": "node api/acquisition.js",
+      "start": "node api/acquisition.js",
     "admin:create": "node api/create-admin.js",
     "dev:all": "concurrently \"npm run dev:server\" \"npm run dev\"",
     "build": "vite build",
