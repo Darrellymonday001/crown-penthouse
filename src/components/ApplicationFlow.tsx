@@ -35,7 +35,7 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({ data, onComple
   const submitApplication = async () => {
     setBusy(true); setError('');
     try {
-      const response = await fetch('/api/applications', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
+      const response = await fetch(`${API_URL}/api/applications`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(record) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Application could not be submitted.');
       setApplicationId(result.applicationId); setAccessToken(result.accessToken); setPrivateUrl(result.applicationId, result.accessToken);
@@ -50,7 +50,9 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({ data, onComple
     if (!applicationId || !accessToken) return setError('Open your private application link to continue.');
     setBusy(true); setError('');
     try {
-      const response = await fetch(`/api/applications/${encodeURIComponent(applicationId)}/payment`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify({ payCurrency: coin.code }) });
+      const response = await fetch(
+  `${API_URL}/api/applications/${encodeURIComponent(applicationId)}/payment`,
+  { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify({ payCurrency: coin.code }) });
       const result = await response.json();
       if (!response.ok || !result.invoiceUrl) throw new Error(result.message || 'Secure checkout could not be started.');
       setInvoiceUrl(result.invoiceUrl); window.location.assign(result.invoiceUrl);
@@ -65,7 +67,9 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({ data, onComple
     if (!token) return undefined;
     setAccessToken(token); sessionStorage.setItem('crown_application_access', JSON.stringify({ applicationId, accessToken: token })); setPrivateUrl(applicationId, token);
     const refresh = async () => {
-      const response = await fetch(`/api/applications/${encodeURIComponent(applicationId)}`, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await fetch(
+  `${API_URL}/api/applications/${encodeURIComponent(applicationId)}`,
+  { headers: { Authorization: `Bearer ${token}` } });
       if (!response.ok) return;
       const result = await response.json() as StatusResponse;
       if (result.application.paymentOrder) { setPaymentStatus(result.application.paymentOrder.paymentStatus.toUpperCase()); setInvoiceUrl(result.application.paymentOrder.invoiceUrl || ''); }
