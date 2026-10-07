@@ -33,7 +33,7 @@ export const Hero: React.FC<HeroProps> = ({ data, onScrollToApply }) => {
 
           <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end gap-4 bg-[#1C1C1C] p-6 rounded-lg border border-[#C5A059]/20 shadow-xl">
             <div>
-              <span className="text-xs text-[#8c8c8c] uppercase tracking-wider block lg:text-right">Application Fee</span>
+              <span className="text-xs text-[#8c8c8c] uppercase tracking-wider block lg:text-right">MONTHLY RENT</span>
               <span className="font-serif-luxury text-2xl sm:text-4xl font-bold text-[#C5A059]">{data.price}</span>
             </div>
             
@@ -41,7 +41,7 @@ export const Hero: React.FC<HeroProps> = ({ data, onScrollToApply }) => {
               onClick={onScrollToApply}
               className="w-full sm:w-auto gold-gradient text-[#121212] font-bold px-8 py-3.5 rounded text-sm tracking-wider hover:opacity-95 transition-all shadow-lg shadow-[#C5A059]/10 uppercase flex items-center justify-center space-x-3 active:scale-98"
             >
-              <span>Apply for a Residence</span>
+              <span>SUBMIT APPLICATION ($80)</span>
               <ArrowRight className="w-4 h-4 text-[#121212]" />
             </button>
           </div>
