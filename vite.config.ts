@@ -19,7 +19,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'http://localhost:3001',
+      '/api': 'https://crown-penthouse-api.onrender.com',
     },
   },
 });
