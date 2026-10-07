@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { ApartmentData } from '../data/apartmentData';
 import {
-  ApplicantRecord
+  ApplicantRecord,
   ConversationEntry
 } from '../data/applicationStore';
 
