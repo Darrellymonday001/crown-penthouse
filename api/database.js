@@ -17,11 +17,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  port: Number(process.env.DB_PORT || 3306),
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "crown_penthouse",
+  host: process.env.DB_HOST || "crown-penthouse-db-crown-penthouse.l.aivencloud.com",
+  port: Number(process.env.DB_PORT || 11452),
+  user: process.env.DB_USER || "avnadmin",
+  password: process.env.DB_PASSWORD || "AVNS_PNKI_4Fnb7cvf_PsY_d",
+  database: process.env.DB_NAME || "defaultdb",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
