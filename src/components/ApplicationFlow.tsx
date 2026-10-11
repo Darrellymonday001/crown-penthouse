@@ -598,7 +598,7 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({
 
           {step === 'phone' && (
             <div className="space-y-6">
-              {field('WhatsApp number', phone, setPhone, 'tel', 'Include your country code, e.g. +234...')}
+              {field('WhatsApp number', phone, setPhone, 'tel', 'Include your country code, e.g. +1...')}
             </div>
           )}
 
