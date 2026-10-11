@@ -21,8 +21,8 @@ export interface ApartmentData {
 export const apartmentData: ApartmentData = {
   title: "The Crown Penthouse at 50 Sullivan",
   tagline: "Unparalleled Panoramic Views & Extraordinary Bespoke Finishes",
-  price: "$1,890",
-  applicationFee: 80,
+  price: "$1,890 per month",
+  applicationFee: 0.5,
   address: "50 Sullivan Street, Penthouse A, SoHo, New York, NY 10012",
   specs: {
     beds: 3,
