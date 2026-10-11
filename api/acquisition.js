@@ -178,14 +178,21 @@ const moneyEqual = (a, b) =>
    DATABASE SCHEMA HELPERS
    ============================================================ */
 
-async function columnExists(table, column) {
-  const [rows] = await pool.execute(
-    `SHOW COLUMNS FROM \`${table}\` LIKE ?`,
-    [column]
-  );
 
-  return rows.length > 0;
+async function columnExists(tableName, columnName) {
+    const [rows] = await pool.execute(
+        `SELECT 1
+         FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_SCHEMA = DATABASE()
+           AND TABLE_NAME = ?
+           AND COLUMN_NAME = ?
+         LIMIT 1`,
+        [tableName, columnName]
+    );
+
+    return rows.length > 0;
 }
+
 
 async function addColumnIfMissing(
   table,
