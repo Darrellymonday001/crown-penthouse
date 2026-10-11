@@ -7,6 +7,9 @@ export interface ApplicantRecord {
   name: string;
   email: string;
   phone: string;
+  currentAddress: string;
+  desiredMoveInDate: string;
+  employmentStatus: string;
   residence: string;
   budgetRange: string;
   purchaseIntent: string;
