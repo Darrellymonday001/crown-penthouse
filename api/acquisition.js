@@ -178,21 +178,23 @@ const moneyEqual = (a, b) =>
    DATABASE SCHEMA HELPERS
    ============================================================ */
 
-
+/*
+ * FIX: Do not use SHOW COLUMNS ... LIKE ? with pool.execute().
+ * Query INFORMATION_SCHEMA with supported placeholders instead.
+ */
 async function columnExists(tableName, columnName) {
-    const [rows] = await pool.execute(
-        `SELECT COLUMN_NAME
-         FROM INFORMATION_SCHEMA.COLUMNS
-         WHERE TABLE_SCHEMA = DATABASE()
-           AND TABLE_NAME = ?
-           AND COLUMN_NAME = ?
-         LIMIT 1`,
-        [tableName, columnName]
-    );
+  const [rows] = await pool.execute(
+    `SELECT COLUMN_NAME
+     FROM INFORMATION_SCHEMA.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE()
+       AND TABLE_NAME = ?
+       AND COLUMN_NAME = ?
+     LIMIT 1`,
+    [tableName, columnName]
+  );
 
-return rows.length > 0;
+  return rows.length > 0;
 }
-
 
 async function addColumnIfMissing(
   table,
@@ -448,6 +450,9 @@ async function ensureSchema() {
         ON DELETE CASCADE
     ) ENGINE=InnoDB
       DEFAULT CHARSET=utf8mb4
+      COLLATE=utf8mb4_unicode_ci
+  `);
+
       COLLATE=utf8mb4_unicode_ci
   `);
 
@@ -898,7 +903,8 @@ async function createFinalApplicationFromPaidSession(
      WHERE id = ?`,
     [
       pending.id,
-      String(
+
+            String(
         providerPayment.payment_id ||
         paymentOrder.payment_id ||
         ''
@@ -1349,6 +1355,8 @@ app.post(
       return res.status(404).json({
         message: 'Payment order not found.',
       });
+
+          });
     }
 
     /*
@@ -1799,7 +1807,8 @@ app.post(
       255
     ).toLowerCase();
 
-    const password = String(
+
+                 const password = String(
       req.body?.password || ''
     );
 
