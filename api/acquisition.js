@@ -99,13 +99,19 @@ app.use(
   })
 );
 
+
 app.use((req, res, next) => {
-  console.log(
-    `[HTTP] ${req.method} ${req.originalUrl}`
-  );
+  console.log(`[HTTP] ${req.method} ${req.originalUrl}`);
+
+  res.on('finish', () => {
+    console.log(
+      `[HTTP RESPONSE] ${req.method} ${req.originalUrl} -> ${res.statusCode}`
+    );
+  });
 
   next();
 });
+
 
 
 /* ============================================================
