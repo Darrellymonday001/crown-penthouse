@@ -22,7 +22,7 @@ const PUBLIC_APP_URL = (
 
 const API_PUBLIC_URL = (
   process.env.API_PUBLIC_URL ||
-  'https://crown-penthouse-api.onrender.com'
+  'https://crown-penthouse-api-43zl.onrender.com'
 ).replace(/\/$/, '');
 
 const NOWPAYMENTS_API_KEY =
