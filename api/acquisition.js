@@ -181,7 +181,7 @@ const moneyEqual = (a, b) =>
 
 async function columnExists(tableName, columnName) {
     const [rows] = await pool.execute(
-        `SELECT 1
+        `SELECT COLUMN_NAME
          FROM INFORMATION_SCHEMA.COLUMNS
          WHERE TABLE_SCHEMA = DATABASE()
            AND TABLE_NAME = ?
@@ -190,7 +190,7 @@ async function columnExists(tableName, columnName) {
         [tableName, columnName]
     );
 
-    return rows.length > 0;
+return rows.length > 0;
 }
 
 
