@@ -13,7 +13,8 @@ import {
   ConversationEntry
 } from '../data/applicationStore';
 
-const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+// const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+import API_URL from '../api';
 
 const getRequestedApplication = () => {
   if (typeof window === 'undefined') {
@@ -219,50 +220,137 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({
 
     setBusy(true);
 
-    try {
-      const response = await fetch(
-        `${API_URL}/api/applications/payment-session`,
+  //   try {
+  //     const response = await fetch(
+  //       `${API_URL}/api/applications/payment-session`,
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify({
+  //           ...record,
+  //           applicationFee: Number(data.applicationFee),
+  //           currency: 'USD'
+  //         })
+  //       }
+  //     );
+
+  //     const result = await response.json().catch(() => ({}));
+
+  //     if (
+  //       !response.ok ||
+  //       !result.applicationId ||
+  //       !result.accessToken ||
+  //       !result.invoiceUrl
+  //     ) {
+  //       throw new Error(
+  //         result.message ||
+  //           'Unable to prepare secure payment. Please try again.'
+  //       );
+  //     }
+
+  //     setApplicationId(result.applicationId);
+  //     setAccessToken(result.accessToken);
+  //     setInvoiceUrl(result.invoiceUrl);
+  //     setPaymentStatus('WAITING');
+      
+  //     sessionStorage.setItem(
+  //       'crown_application_access',
+  //       JSON.stringify({
+  //         applicationId: result.applicationId,
+  //         accessToken: result.accessToken
+  //       })
+  //     );
+
+  //     setPrivateUrl(result.applicationId, result.accessToken);
+
+  //     appendMessage(
+  //       'applicant',
+  //       'Reviewed application and proceeded to NOWPayments checkout.'
+  //     );
+
+  //     // The user goes to the secure payment page.
+  //     // The server must independently verify the payment.
+  //     window.location.assign(result.invoiceUrl);
+  //   } catch (checkoutError) {
+  //     setError(
+  //       checkoutError instanceof Error
+  //         ? checkoutError.message
+  //         : 'Unable to prepare secure payment.'
+  //     );
+  //   } finally {
+  //     setBusy(false);
+  //   }
+  // };
+
+
+ try {
+    let checkoutApplicationId = applicationId;
+      let checkoutAccessToken = accessToken;
+
+      if (!checkoutApplicationId || !checkoutAccessToken) {
+        const sessionResponse = await fetch(
+          `${API_URL}/api/applications`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(record)
+          }
+        );
+
+        const session = await sessionResponse.json().catch(() => ({}));
+
+        if (
+          !sessionResponse.ok ||
+          !session.applicationId ||
+          !session.accessToken
+        ) {
+          throw new Error(
+            session.message ||
+              'Unable to save your application. Please try again.'
+          );
+        }
+
+        checkoutApplicationId = session.applicationId;
+        checkoutAccessToken = session.accessToken;
+        setApplicationId(checkoutApplicationId);
+        setAccessToken(checkoutAccessToken);
+
+        sessionStorage.setItem(
+          'crown_application_access',
+          JSON.stringify({
+            applicationId: checkoutApplicationId,
+            accessToken: checkoutAccessToken
+          })
+        );
+
+        setPrivateUrl(checkoutApplicationId, checkoutAccessToken);
+      }
+
+      const paymentResponse = await fetch(
+        `${API_URL}/api/applications/${encodeURIComponent(checkoutApplicationId)}/payment`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...record,
-            applicationFee: Number(data.applicationFee),
-            currency: 'USD'
-          })
+            Authorization: `Bearer ${checkoutAccessToken}`
+          }
         }
       );
 
-      const result = await response.json().catch(() => ({}));
+      const payment = await paymentResponse.json().catch(() => ({}));
 
-      if (
-        !response.ok ||
-        !result.applicationId ||
-        !result.accessToken ||
-        !result.invoiceUrl
-      ) {
+      if (!paymentResponse.ok || !payment.invoiceUrl) {
         throw new Error(
-          result.message ||
+          payment.message ||
             'Unable to prepare secure payment. Please try again.'
         );
       }
 
-      setApplicationId(result.applicationId);
-      setAccessToken(result.accessToken);
-      setInvoiceUrl(result.invoiceUrl);
-      setPaymentStatus('WAITING');
-      
-      sessionStorage.setItem(
-        'crown_application_access',
-        JSON.stringify({
-          applicationId: result.applicationId,
-          accessToken: result.accessToken
-        })
-      );
-
-      setPrivateUrl(result.applicationId, result.accessToken);
+      setInvoiceUrl(payment.invoiceUrl);
+      setPaymentStatus(payment.paymentStatus || 'WAITING');
 
       appendMessage(
         'applicant',
@@ -271,7 +359,7 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({
 
       // The user goes to the secure payment page.
       // The server must independently verify the payment.
-      window.location.assign(result.invoiceUrl);
+      window.location.assign(payment.invoiceUrl);
     } catch (checkoutError) {
       setError(
         checkoutError instanceof Error
@@ -283,6 +371,10 @@ export const ApplicationFlow: React.FC<ApplicationFlowProps> = ({
     }
   };
 
+
+
+
+    
   /*
    * Poll the server after returning from NOWPayments.
    *
