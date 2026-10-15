@@ -32,7 +32,7 @@ const NOWPAYMENTS_IPN_SECRET =
   process.env.NOWPAYMENTS_IPN_SECRET || '';
 
 const APPLICATION_FEE_USD = Number(
-  process.env.APPLICATION_FEE_USD || 15
+  process.env.APPLICATION_FEE_USD || 80
 );
 
 const ADMIN_SESSION_HOURS = Number(
